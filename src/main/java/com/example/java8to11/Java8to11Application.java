@@ -4,6 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.SQLOutput;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.function.*;
 
 @SpringBootApplication
@@ -57,6 +59,7 @@ public class Java8to11Application {
 	}
 	*/
 
+	/*
 	// 변수 캡처
 	public static void main(String[] args) {
 		Java8to11Application app = new Java8to11Application();
@@ -97,6 +100,38 @@ public class Java8to11Application {
 			System.out.println(i + baseNumber);
 		};
 		printInt.accept(10);
+	}
+	*/
 
+	// 메소드 레퍼런스
+	public static void main(String[] args) {
+
+		// 스태틱 메소드 레퍼런스 사용
+		UnaryOperator<String> hi = Greeting::hi;
+
+		// 인스턴스 메소드 레퍼런스 사용
+		Greeting greeting = new Greeting();
+		UnaryOperator<String> hello = greeting::hello;
+		System.out.println(hello.apply("there"));
+
+		// 생성자 참조
+		Supplier<Greeting> newGreeting = Greeting::new;
+
+		// 아래 2 라인은 서로 다른 생성자를 참조하고 있음
+		Function<String, Greeting> greeting3 = Greeting::new;
+		Supplier<Greeting> greeting4 = Greeting::new; // 문자열 받지 않는 생성자 참조
+
+		// 임의 객체 레퍼런스 참조
+		String[] names = {"a", "b", "c"};
+
+		// 모두 동일한 의미
+		Arrays.sort(names, String::compareToIgnoreCase);
+		Arrays.sort(names, (o1, o2) -> 0);
+		Arrays.sort(names, new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				return 0;
+			}
+		});
 	}
 }
