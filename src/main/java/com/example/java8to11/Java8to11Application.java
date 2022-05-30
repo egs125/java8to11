@@ -103,6 +103,7 @@ public class Java8to11Application {
 	}
 	*/
 
+	/*
 	// 메소드 레퍼런스
 	public static void main(String[] args) {
 
@@ -134,4 +135,47 @@ public class Java8to11Application {
 			}
 		});
 	}
+	*/
+
+	/*
+	// 인터페이스 기본 메소드
+	public static void main(String[] args) {
+		Foo foo = new DefaultFoo("k");
+		foo.printName();
+		foo.printNameUpperCase();
+		Foo.printAnything();
+	}
+	*/
+
+	/*
+	자바 8 API의 기본 메소드와 스태틱 메소드
+	public static void main(String[] args) {
+		List<String> names = new ArrayList<>();
+		names.add("keesun");
+		names.add("whiteship");
+		names.add("toby");
+		names.add("foo");
+
+		names.forEach(System.out::println);
+		for (String n : names) {
+			System.out.println(n);
+		}
+
+		names
+			.stream()
+			.map(String::toUpperCase)
+			.filter(s -> s.startsWith("K"))
+			.collect(Collectors.toSet());
+
+		names.removeIf(s -> s.startsWith("K");
+
+		Comparator<String> compareToIgnoreCase = String::compareToIgnoreCase;
+		names.sort(compareToIgnoreCase.reversed().thenComparing());
+
+		Spliterator<String> spliterator = names.spliterator();
+		Spliterator<String> spliterator1 = spliterator.trySplit();
+		while (spliterator.tryAdvance(System.out::println));
+		while (spliterator1.tryAdvance(System.out::println));
+	}
+	 */
 }
