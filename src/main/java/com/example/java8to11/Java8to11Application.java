@@ -3,6 +3,7 @@ package com.example.java8to11;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.swing.text.html.Option;
 import java.sql.SQLOutput;
 import java.util.*;
 import java.util.function.*;
@@ -218,6 +219,7 @@ public class Java8to11Application {
     }
     */
 
+    /*
     public static void main(String[] args) {
         List<OnlineClass> springClasses = new ArrayList<>();
         springClasses.add(new OnlineClass(1, "spring boot", true));
@@ -272,7 +274,56 @@ public class Java8to11Application {
                     .filter(oc -> oc.getTitle().contains("spring"))
                     .map(OnlineClass::getTitle)
                     .collect(Collectors.toList());
+    }
+    */
 
+    // Optional
+    public static void main(String[] args) {
+        List<OnlineClass> springClasses = new ArrayList<>();
+        springClasses.add(new OnlineClass(1, "spring boot", true));
+        springClasses.add(new OnlineClass(2, "spring data jpa", true));
+        springClasses.add(new OnlineClass(3, "spring mvc", false));
+        springClasses.add(new OnlineClass(4, "spring core", false));
+        springClasses.add(new OnlineClass(5, "rest api development", false));
 
+        OnlineClass spring_boot = new OnlineClass(1, "spring boot", true);
+        // 아래 코드는 null pointer exception 발생.
+        // Duration studyDuration = spring_boot.getProgress().getStudyDuration();
+        // 이 오류 방지를 위해 아래와 같이 코딩. 자바 8부터 Optional로 아래 코드 대체 가능
+        // Progress progress = spring_boot.getProgress();
+        // if ( progress != null ) {
+        //    ...
+        // }
+        Optional<Progress> progress = spring_boot.getProgress();
+
+        // 원시타입은 전용 메소드 있음
+        Optional.of(10);
+        OptionalInt.of(10); // 권장
+
+        // Collection, Map, Stream, Array, Optional을 Optional로 감싸지 말것
+
+        Optional<OnlineClass> optional = springClasses.stream()
+                .filter(oc -> oc.getTitle().startsWith("spring"))
+                .findFirst();
+
+//        OnlineClass oc = optional.get();
+//        OnlineClass oc = optional.orElse(createNewClasss());
+        OnlineClass oc = optional.orElseGet(Java8to11Application::createNewClasss);
+        OnlineClass oc2 = optional.orElseThrow(IllegalStateException::new);
+        Optional<OnlineClass> oc3 = optional.filter(o -> !o.getClosed()); // 아래 코드와 동일
+        // Optional<OnlineClass> oc3 = optional.filter(OnlineClass::getClosed);
+
+        Optional<Integer> integer = optional.map(OnlineClass::getId);
+
+        // map으로 꺼내는 타입 자체가 Optional일 경우
+        Optional<Progress> op = optional.flatMap(OnlineClass::getProgress);
+        // 아래 코드 2줄을 위 코드 한줄로 축약 가능
+        // Optional<Optional<Progress>> op = optional.map(OnlineClass::getProgress);
+        // Optional<Progress> progess = op.orElseThrow();
+
+    }
+
+    private static OnlineClass createNewClasss() {
+        return new OnlineClass(10, "New class", false);
     }
 }
