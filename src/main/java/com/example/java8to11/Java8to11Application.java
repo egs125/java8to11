@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.swing.text.html.Option;
 import java.sql.SQLOutput;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -277,6 +279,7 @@ public class Java8to11Application {
     }
     */
 
+    /*
     // Optional
     public static void main(String[] args) {
         List<OnlineClass> springClasses = new ArrayList<>();
@@ -322,8 +325,33 @@ public class Java8to11Application {
         // Optional<Progress> progess = op.orElseThrow();
 
     }
-
     private static OnlineClass createNewClasss() {
         return new OnlineClass(10, "New class", false);
+    }
+    */
+
+    public static void main(String[] args) throws InterruptedException {
+        // 근본적으로 Timestamp와 동일. mutable하고 버그가 있어 사용에 주의 필요
+        Date date = new Date();
+
+        // 기계시간
+        // 기준시 UTC, GMT
+        Instant instant = Instant.now();
+        ZoneId zone = ZoneId.systemDefault();
+        ZonedDateTime zonedDateTime = instant.atZone(zone);
+
+        // 인류용 일시
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime.of(1982, Month.APRIL, 3, 2, 3);
+        ZonedDateTime nowInKorea = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+
+        LocalDate today = LocalDate.now();
+        LocalDate thisYearBirthday = LocalDate.of(2020, Month.JULY, 15);
+        Period period = Period.between(today, thisYearBirthday);
+
+        // 파싱 또는 포매팅
+        System.out.println(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        DateTimeFormatter MMddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate.parse("07/15/1982", MMddyyyy);
     }
 }
