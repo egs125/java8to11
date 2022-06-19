@@ -8,6 +8,9 @@ import java.sql.SQLOutput;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -330,6 +333,7 @@ public class Java8to11Application {
     }
     */
 
+    /* Date
     public static void main(String[] args) throws InterruptedException {
         // 근본적으로 Timestamp와 동일. mutable하고 버그가 있어 사용에 주의 필요
         Date date = new Date();
@@ -353,5 +357,16 @@ public class Java8to11Application {
         System.out.println(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         DateTimeFormatter MMddyyyy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDate.parse("07/15/1982", MMddyyyy);
+    }
+    */
+
+    // Concurrent
+    public static void main(String[] args) {
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(getRunnable("hello"), 1, 2, TimeUnit.SECONDS);
+    }
+
+    private static Runnable getRunnable(String message) {
+        return () -> System.out.println(message + Thread.currentThread().getName());
     }
 }
