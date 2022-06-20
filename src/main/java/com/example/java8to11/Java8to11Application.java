@@ -8,9 +8,7 @@ import java.sql.SQLOutput;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -362,8 +360,28 @@ public class Java8to11Application {
 
     // Concurrent
     public static void main(String[] args) {
-        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(getRunnable("hello"), 1, 2, TimeUnit.SECONDS);
+
+        // ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        // executorService.scheduleAtFixedRate(getRunnable("hello"), 1, 2, TimeUnit.SECONDS);
+
+        // Callable은 리턴값 가질 수 있음
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        Callable<String> hello = () -> {
+            Thread.sleep(2000);
+            return "Hello";
+        };
+
+        Future<String> helloFuture = executorService.submit(hello);
+        System.out.println(helloFuture.isDone());
+        System.out.println("Started");
+
+        helloFuture.get(); // 블록킹
+        helloFuture.cancel(true);   // 현재 진행중인 작업을 인터럽트하여 종료시킴
+
+        System.out.println(helloFuture.isDone());
+        System.out.println("End");
+        executorService.shutdown();
     }
 
     private static Runnable getRunnable(String message) {
